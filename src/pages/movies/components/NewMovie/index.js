@@ -2,21 +2,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import { GlobalContext } from '../../../../Contex';
 import { newMovie, searchMovie } from '../../../../services/api';
 import { Movie, SearchResultWrapper, SelectedMovie } from './styled';
+import { ratingNotes } from '../../../../utils';
 
 export default function NewMovie() {
   const { setMovies, movies } = useContext(GlobalContext);
   const [search, setSearch] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState({});
-  const ratings = [
-    '0.0 / 5.0 ⭐️', '0.5 / 5.0 ⭐️',
-    '1.0 / 5.0 ⭐️', '1.5 / 5.0 ⭐️',
-    '2.0 / 5.0 ⭐️', '2.5 / 5.0 ⭐️',
-    '3.0 / 5.0 ⭐️', '3.5 / 5.0 ⭐️',
-    '4.0 / 5.0 ⭐️', '4.5 / 5.0 ⭐️',
-    '5.0 / 5.0 ⭐️',
-  ];
-  const [rating, setRating] = useState(ratings[0]);
+  const [rating, setRating] = useState(ratingNotes[0]);
 
   function handleWatched() {
     setSelectedMovie(movie => ({...movie, watched: !movie.watched}));
@@ -99,7 +92,7 @@ export default function NewMovie() {
                     </label>
                     {selectedMovie.watched &&
                       <select className='animationUp' value={rating} onChange={e => setRating(e.target.value)}>
-                        {ratings.map(value => 
+                        {ratingNotes.map(value => 
                           <option value={value} key={value}>{value}</option>  
                         )}
                       </select>

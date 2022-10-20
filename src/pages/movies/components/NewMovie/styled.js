@@ -26,7 +26,7 @@ export const Movie = styled.div`
   flex-direction: column;
   margin: 0 0.5rem;
   margin-right: ${props => props.selected ? '0' : '0.5rem'};
-  background-color: var(--purple);
+  background-color: var(--blue);
   border-radius: 0.5rem;
   border-bottom-right-radius: ${props => props.selected ? '0' : '0.5rem'};
   border-top-right-radius: ${props => props.selected ? '0' : '0.5rem'};
@@ -39,7 +39,7 @@ export const Movie = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid var(--purple);
+    border: 1px solid var(--blue);
     border-radius: 0.5rem;
     margin-bottom: 2px;
   }
@@ -49,12 +49,12 @@ export const SelectedMovie = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 11rem;
-  background: var(--purple);
+  background: var(--blue);
   padding: 0.25rem;
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
   margin-right: 0.5rem;
-
+  
   h2 {
     font-size: 0.9rem;
     font-weight: 600;
@@ -63,7 +63,8 @@ export const SelectedMovie = styled.div`
 
   label {
     margin-top: auto;
-    
+    color: var(--black);
+
     input {
       margin-right: 0.25rem;
     }
@@ -72,7 +73,7 @@ export const SelectedMovie = styled.div`
   button {
     margin-top: auto;
     width: 100%;
-    background-color: var(--pink);
+    background-color: var(--purple);
     border: 1px solid var(--black);
     border-radius: 0.5rem;
     padding: 0.5rem;

@@ -22,3 +22,8 @@ export async function newMovie(movie) {
   const response = await axios.post('/movies', movie);
   return response.data;
 }
+
+export async function ratingMovie(movieId, rating) {
+  const response = await axios.put('/movies', {movieId, rating});
+  return response.status === 200;
+} 

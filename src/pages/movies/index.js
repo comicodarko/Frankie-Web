@@ -1,27 +1,53 @@
 import { useContext, useEffect, useState } from "react";
+import { Check2 } from '@styled-icons/bootstrap';
 
 import { Container } from "../../components/Defaults";
 import { GlobalContext } from "../../Contex";
-import { getMovies } from "../../services/api";
+import { getMovies, ratingMovie } from "../../services/api";
+import { ratingNotes } from "../../utils";
 import Bottom from "./components/Bottom";
-import { MoviesWrapper } from "./styles";
+import { EvaluateButton, MoviesWrapper, RatingConfirmWrapper } from "./styles";
 
 export default function Movies() {
   const { setMovies, movies, movieFilter } = useContext(GlobalContext);
   const [moviesToShow, setMoviesToShow] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState({});
+  const [rating, setRating] = useState(ratingNotes[0]);
 
-  useEffect(() => {
+  function handleChangeMovies() {
     setMoviesToShow(() => {
       return movieFilter === 'watched' 
         ? movies.filter(movie => movie.watched)
         : movieFilter === 'unwatched'
           ? movies.filter(movie => !movie.watched)
           : movies
+    });
+  }
+
+  function handleRating() {
+    ratingMovie(selectedMovie.id, rating).then(success => {
+      console.log(success)
+      if(success) {
+        setMovies(oldMovies => {
+          let editedMovies = [...oldMovies];
+          const movieIndex = oldMovies.findIndex(movie => movie.id === selectedMovie.id);
+          console.log(movieIndex);
+          editedMovies[movieIndex] = {...selectedMovie, rating, watched: true}; 
+          return editedMovies;
+        });
+      
+      } else {
+        alert('Falha ao dar nota!');
+      } 
     })
-  }, [movieFilter]);
+  }
 
   useEffect(() => {
-    getMovies().then(movies => { setMovies(movies) })
+    handleChangeMovies();
+  }, [movieFilter, movies]);
+
+  useEffect(() => {
+    getMovies().then(movies => { setMovies(movies); });
   }, []);
 
   return (
@@ -29,11 +55,27 @@ export default function Movies() {
       <h1>Filmes</h1>
       <MoviesWrapper>
         {moviesToShow.map(movie => (
-          <div key={movie.name} className="animationUp movie">
+          <div key={movie.id} className="animationUp movie">
             <img src={movie.posterURL} alt="poster"/>
             <div>
               <span>{movie.name}</span>
-              <span className="rating">{movie.rating}</span>
+              {movie.rating
+                ? <span className="rating">{movie.rating}</span>
+                : selectedMovie.name !== movie.name 
+                  ? <EvaluateButton className="animationLeft" onClick={() => setSelectedMovie(movie)}>
+                      Dar Nota
+                    </EvaluateButton>
+                  : <RatingConfirmWrapper className="animationRight">
+                      <select value={rating} onChange={e => setRating(e.target.value)} autoFocus>
+                        {ratingNotes.map(rating =>
+                          <option value={rating} key={rating}>{rating}</option>  
+                        )}
+                      </select>
+                      <button className="confirm" onClick={handleRating}>
+                        <Check2 size={20}/>
+                      </button>
+                    </RatingConfirmWrapper>                
+              }
             </div>
           </div>
         ))}

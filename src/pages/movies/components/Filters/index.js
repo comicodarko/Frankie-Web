@@ -8,18 +8,20 @@ export default function Filters() {
   const { setMovieFilter, movieFilter } = useContext(GlobalContext);
 
   return (
-    <FiltersWrapper>
-      <button onClick={() => setMovieFilter('all')}>
-        <IconAll size={32} active={movieFilter === 'all'} />
-      </button>
-      <VerticalDivider />
-      <button onClick={() => setMovieFilter('watched')}>
-        <IconWatched size={32} active={movieFilter === 'watched'} />
-      </button>
-      <VerticalDivider />
-      <button onClick={() => setMovieFilter('unwatched')}>
-        <IconUnwatched size={32} active={movieFilter === 'unwatched'}/>
-      </button>
-    </FiltersWrapper>
+    <>
+      <FiltersWrapper>
+        <button onClick={() => setMovieFilter('all')}>
+          <IconAll size={32} active={movieFilter} />
+        </button>
+        <VerticalDivider />
+        <button onClick={() => setMovieFilter('watched')}>
+          <IconWatched size={32} active={movieFilter} />
+        </button>
+        <VerticalDivider />
+        <button onClick={() => setMovieFilter('unwatched')}>
+          <IconUnwatched size={32} active={movieFilter}/>
+        </button>
+      </FiltersWrapper>
+    </>
   )
 }

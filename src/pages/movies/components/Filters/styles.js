@@ -12,13 +12,13 @@ export const FiltersWrapper = styled.section`
 `
 
 export const IconAll = styled(ThSmall)`
-  fill: ${props => props.active ? 'var(--purple)' : 'var(--black)'};
+  fill: ${props => props.active === 'all' ? 'var(--blue)' : 'var(--black)'};
 `
 
 export const IconWatched = styled(EyeFill)`
-  fill: ${props => props.active ? 'var(--purple)' : 'var(--black)'};
+  fill: ${props => props.active  === 'watched' ? 'var(--blue)' : 'var(--black)'};
 `
 
 export const IconUnwatched = styled(EyeSlash)`
-  fill: ${props => props.active ? 'var(--purple)' : 'var(--black)'};
+  fill: ${props => props.active  === 'unwatched' ? 'var(--blue)' : 'var(--black)'};
 `
