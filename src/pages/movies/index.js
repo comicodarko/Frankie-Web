@@ -6,21 +6,26 @@ import { GlobalContext } from "../../Contex";
 import { getMovies, ratingMovie } from "../../services/api";
 import { ratingNotes } from "../../utils";
 import Bottom from "./components/Bottom";
-import { EvaluateButton, MoviesWrapper, RatingConfirmWrapper } from "./styles";
+import { EvaluateButton, MoviesWrapper, NoMovies, RatingConfirmWrapper } from "./styles";
+import Header from "./components/Header";
 
 export default function Movies() {
-  const { setMovies, movies, movieFilter } = useContext(GlobalContext);
-  const [moviesToShow, setMoviesToShow] = useState([]);
+  const { setMovies, movies, movieFilter, moviesToShow, setMoviesToShow, search } = useContext(GlobalContext);
   const [selectedMovie, setSelectedMovie] = useState({});
   const [rating, setRating] = useState(ratingNotes[0]);
 
   function handleChangeMovies() {
     setMoviesToShow(() => {
-      return movieFilter === 'watched' 
-        ? movies.filter(movie => movie.watched)
-        : movieFilter === 'unwatched'
-          ? movies.filter(movie => !movie.watched)
-          : movies
+      const filtered = movies.filter(movie => {
+        if(movieFilter === 'all') {
+          return movie.name.toLowerCase().includes(search.toLowerCase());
+        } else if(movieFilter === 'unwatched') {
+          return movie.name.toLowerCase().includes(search.toLowerCase()) && !movie.watched;
+        } else if(movieFilter === 'watched') {
+          return movie.name.toLowerCase().includes(search.toLowerCase()) && movie.watched;
+        }
+      });
+      return filtered;
     });
   }
 
@@ -47,41 +52,44 @@ export default function Movies() {
   }, [movieFilter, movies]);
 
   useEffect(() => {
-    getMovies().then(movies => { setMovies(movies); });
+    getMovies().then(movies => { setMovies(movies.reverse()); });
   }, []);
 
   return (
     <Container>
-      <h1>Filmes</h1>
+      <Header />
       <MoviesWrapper>
-        {moviesToShow.map(movie => (
-          <div key={movie.id} className="animationUp movie">
-            <img src={movie.posterURL} alt="poster"/>
-            <div>
-              <span>{movie.name}</span>
-              {movie.rating
-                ? <span className="rating">{movie.rating}</span>
-                : selectedMovie.name !== movie.name 
-                  ? <EvaluateButton className="animationLeft" onClick={() => setSelectedMovie(movie)}>
-                      Dar Nota
-                    </EvaluateButton>
-                  : <RatingConfirmWrapper className="animationRight">
-                      <select value={rating} onChange={e => setRating(e.target.value)} autoFocus>
-                        {ratingNotes.map(rating =>
-                          <option value={rating} key={rating}>{rating}</option>  
-                        )}
-                      </select>
-                      <button className="confirm" onClick={handleRating}>
-                        <Check2 size={20}/>
-                      </button>
-                    </RatingConfirmWrapper>                
-              }
+        {moviesToShow.length > 0 
+          ? moviesToShow.map(movie => (
+            <div key={movie.id} className="animationUp movie">
+              <img src={movie.posterURL} alt="poster"/>
+              <div>
+                <span>{movie.name}</span>
+                {movie.rating
+                  ? <span className="rating">{movie.rating}</span>
+                  : selectedMovie.name !== movie.name 
+                    ? <EvaluateButton className="animationLeft" onClick={() => setSelectedMovie(movie)}>
+                        Dar Nota
+                      </EvaluateButton>
+                    : <RatingConfirmWrapper className="animationRight">
+                        <select value={rating} onChange={e => setRating(e.target.value)} autoFocus>
+                          {ratingNotes.map(rating =>
+                            <option value={rating} key={rating}>{rating}</option>  
+                          )}
+                        </select>
+                        <button className="confirm" onClick={handleRating}>
+                          <Check2 size={20}/>
+                        </button>
+                      </RatingConfirmWrapper>                
+                }
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        : <NoMovies>Sem Filmes :/</NoMovies>
+        }
       </MoviesWrapper>
 
-      <Bottom movies={movies} setMovies={setMovies}/>
+      <Bottom />
     </Container>
   )
 }

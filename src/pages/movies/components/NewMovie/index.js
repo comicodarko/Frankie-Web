@@ -108,7 +108,7 @@ export default function NewMovie() {
       <input 
         value={search} 
         onChange={e => setSearch(e.target.value)} 
-        placeholder="Buscar novo filme"  
+        placeholder="Adicionar filme"  
       />
     </>
   )

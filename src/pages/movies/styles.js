@@ -3,6 +3,9 @@ import styled from "styled-components";
 export const MoviesWrapper = styled.section`
   overflow-y: auto;
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
   div.movie {
     padding: 0.75rem;
@@ -84,4 +87,13 @@ export const RatingConfirmWrapper = styled.span`
       transition: 0.5s;
     }
   }
+`
+
+export const NoMovies = styled.span`
+  display: flex;
+  background-color: var(--blueDark);
+  margin: auto;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 2rem;
 `

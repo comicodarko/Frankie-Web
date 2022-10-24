@@ -14,5 +14,5 @@ export const Container = styled.main`
 
 export const VerticalDivider = styled.span`
   border: 1px solid var(--black);
-  margin: auto 0.5rem;
+  margin: 0 0.5rem;
 `

@@ -6,7 +6,6 @@ export default function Bottom() {
   return (
     <BottomWrapper>
       <NewMovie />
-      <Filters />
     </BottomWrapper>
   )
 }

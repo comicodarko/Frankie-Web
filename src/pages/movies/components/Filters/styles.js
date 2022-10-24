@@ -3,8 +3,11 @@ import { ThSmall } from "@styled-icons/typicons"
 import { EyeFill, EyeSlash } from "@styled-icons/bootstrap"
 
 export const FiltersWrapper = styled.section`
-  margin: 0 1rem;
-  border-radius: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  background-color: var(--blueDark);
+  border: 2px solid var(--purple);
+  display: flex;
 
   svg {
     transition: 0.5s;

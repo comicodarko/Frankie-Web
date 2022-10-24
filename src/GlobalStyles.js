@@ -39,7 +39,7 @@ export const GlobalStyle = createGlobalStyle`
   }
   input, select {
     padding: 5px;
-    border: 3px solid var(--purple);
+    border: 2px solid var(--purple);
     border-radius: 5px;
     outline: none;
     color: var(--black);

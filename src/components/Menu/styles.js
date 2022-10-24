@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const MenuWrapper = styled.nav`
   display: flex;
   flex-direction: column;
-  padding: 0.5rem;
   margin: 1rem;
   height: 95%;
   width: 15rem;
@@ -13,7 +12,7 @@ export const MenuWrapper = styled.nav`
 
   h2 {
     font-weight: 400;
-    margin-bottom: 1rem;
+    margin: 1rem;
 
     span {
       color: var(--pink);
@@ -23,13 +22,25 @@ export const MenuWrapper = styled.nav`
   ul {
     list-style: none;
     background-color: var(--blueDark);
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    
-    li {
-      margin: 1rem 0;
-      cursor: pointer;
-      font-weight: 600;
-    }
   }
 `
+
+export const MenuPage = styled.li`
+  display: flex;
+  align-items: center;
+  padding: 1rem 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: ${props => props.active ? 'var(--blue)' : 'var(--white)'}; 
+  transition: 0.5s;
+
+  svg  {
+    fill: ${props => props.active ? 'var(--pink)' : 'var(--white)'}; 
+    margin-right: 0.5rem;
+    transition: 0.5s;
+  }
+
+  &:hover {
+    background-color: ${props => props.active ? 'none' : 'var(--pink)'};
+  }
+` 
