@@ -12,7 +12,7 @@ export const MoviesWrapper = styled.section`
     font-size: 1.5rem;
     display: flex;
     align-items: center;
-    cursor: pointer;
+    position: relative;
     transition: 0.5s;
     border-left: 2px solid var(--black);
 
@@ -35,14 +35,25 @@ export const MoviesWrapper = styled.section`
       margin-right: 1rem;
     }
 
-    div {
+    > div {
       display: flex;
       flex-direction: column;
+      
+      span.rating {
+        color: var(--blue);
+      }
+      
+      div.genres {
+        display: flex;
+        right: 0.75rem;;
+        position: absolute;
+        font-size: 0.95rem;
+        max-width: 15rem;
+        justify-content: right;
+        flex-wrap: wrap;
+      }
     }
 
-    span.rating {
-      color: var(--blue);
-    }
   }
 `
 
@@ -96,4 +107,26 @@ export const NoMovies = styled.span`
   padding: 1rem;
   border-radius: 0.5rem;
   font-size: 2rem;
+`
+
+export const Genre = styled.button`
+  border: 2px solid var(--white);
+  margin: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--${props => 
+    props.color === 'default' 
+      ? 'gray'
+      : props.color === 'brown' 
+        ? 'green'
+        : props.color
+    });
+  color: var(--black);
+  font-weight: 700;
+  transition: 0.3s;
+  filter: brightness(0.85);
+  
+  &:hover {
+    filter: brightness(1.1);
+  }
 `

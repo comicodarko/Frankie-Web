@@ -12,6 +12,10 @@ export const FiltersWrapper = styled.section`
   svg {
     transition: 0.5s;
   }
+
+  select {
+    margin: 0 1rem;
+  }
 `
 
 export const IconAll = styled(ThSmall)`

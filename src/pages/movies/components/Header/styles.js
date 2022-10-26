@@ -8,7 +8,7 @@ export const HeaderWrapper = styled.header`
     margin-right: auto;
   }
 
-  input {
-    margin-right: 1rem;
+  select {
+    margin: 0 0.75rem;
   }
 `

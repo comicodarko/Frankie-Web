@@ -6,23 +6,26 @@ import { GlobalContext } from "../../Contex";
 import { getMovies, ratingMovie } from "../../services/api";
 import { ratingNotes } from "../../utils";
 import Bottom from "./components/Bottom";
-import { EvaluateButton, MoviesWrapper, NoMovies, RatingConfirmWrapper } from "./styles";
+import { EvaluateButton, Genre, MoviesWrapper, NoMovies, RatingConfirmWrapper } from "./styles";
 import Header from "./components/Header";
 
 export default function Movies() {
-  const { setMovies, movies, movieFilter, moviesToShow, setMoviesToShow, search } = useContext(GlobalContext);
+  const { setMovies, movies, movieFilter, moviesToShow, setMoviesToShow, search, movieGenre, setMovieGenre } = useContext(GlobalContext);
   const [selectedMovie, setSelectedMovie] = useState({});
   const [rating, setRating] = useState(ratingNotes[0]);
 
   function handleChangeMovies() {
     setMoviesToShow(() => {
       const filtered = movies.filter(movie => {
-        if(movieFilter === 'all') {
-          return movie.name.toLowerCase().includes(search.toLowerCase());
+        const genreValidation = movieGenre === 'Todos' 
+          ? true 
+          : movie.genres.some(genre => genre.name === movieGenre); 
+        if(movieFilter === 'all' && genreValidation) {
+          return movie.name.toLowerCase().includes(search.toLowerCase()) && genreValidation;
         } else if(movieFilter === 'unwatched') {
-          return movie.name.toLowerCase().includes(search.toLowerCase()) && !movie.watched;
+          return movie.name.toLowerCase().includes(search.toLowerCase()) && !movie.watched && genreValidation;
         } else if(movieFilter === 'watched') {
-          return movie.name.toLowerCase().includes(search.toLowerCase()) && movie.watched;
+          return movie.name.toLowerCase().includes(search.toLowerCase()) && movie.watched && genreValidation;
         }
       });
       return filtered;
@@ -49,7 +52,7 @@ export default function Movies() {
 
   useEffect(() => {
     handleChangeMovies();
-  }, [movieFilter, movies]);
+  }, [movieFilter, movies, movieGenre]);
 
   useEffect(() => {
     getMovies().then(movies => { setMovies(movies.reverse()); });
@@ -82,6 +85,11 @@ export default function Movies() {
                         </button>
                       </RatingConfirmWrapper>                
                 }
+                <div className="genres">
+                  {movie.genres.map(genre => 
+                    <Genre color={genre.color} onClick={() => setMovieGenre(genre.name)}>{genre.name}</Genre>
+                  )}
+                </div>
               </div>
             </div>
           ))
