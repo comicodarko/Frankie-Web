@@ -86,6 +86,9 @@ export default function NewMovie() {
                 {selectedMovie.id === movie.id &&
                   <SelectedMovie className='movieSelected animationShow'>
                     <h2>{movie.title}</h2>
+                    <div className="providers">
+                      {movie.providers.map(provider => <img src={provider.logo} alt={provider.name}/>)}
+                    </div>
                     <label>
                       <input type="checkbox" checked={movie.checked} onChange={handleWatched} />
                       Assistido

@@ -79,4 +79,15 @@ export const SelectedMovie = styled.div`
     padding: 0.5rem;
     color: var(--black);
   }
+
+  div.providers {
+    display: flex;
+
+    img {
+      width: 2rem;
+      height: 2rem;
+      margin-right: 0.25rem;
+      border-radius: 0.3rem;
+    }
+  }
 `
