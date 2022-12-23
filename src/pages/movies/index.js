@@ -2,29 +2,29 @@ import { useContext, useEffect, useState } from "react";
 import { Check2 } from '@styled-icons/bootstrap';
 
 import { Container } from "../../components/Defaults";
-import { GlobalContext } from "../../Contex";
+import { GlobalContext } from "../../contexts/global";
 import { getMovies, ratingMovie } from "../../services/api";
 import { ratingNotes } from "../../utils";
-import Bottom from "./components/Bottom";
+import Bottom from "../../components/Bottom";
 import { EvaluateButton, Genre, MoviesWrapper, NoMovies, RatingConfirmWrapper } from "./styles";
-import Header from "./components/Header";
+import Header from "../../components/Header";
 
 export default function Movies() {
-  const { setMovies, movies, movieFilter, moviesToShow, setMoviesToShow, search, movieGenre, setMovieGenre } = useContext(GlobalContext);
+  const { setMovies, movies, dataFilter, dataToShow, setDataToShow, search, movieGenre, setMovieGenre } = useContext(GlobalContext);
   const [selectedMovie, setSelectedMovie] = useState({});
   const [rating, setRating] = useState(ratingNotes[0]);
 
   function handleChangeMovies() {
-    setMoviesToShow(() => {
+    setDataToShow(() => {
       const filtered = movies.filter(movie => {
         const genreValidation = movieGenre === 'Todos' 
           ? true 
           : movie.genres.some(genre => genre.name === movieGenre); 
-        if(movieFilter === 'all' && genreValidation) {
+        if(dataFilter === 'all' && genreValidation) {
           return movie.name.toLowerCase().includes(search.toLowerCase()) && genreValidation;
-        } else if(movieFilter === 'unwatched') {
+        } else if(dataFilter === 'unwatched') {
           return movie.name.toLowerCase().includes(search.toLowerCase()) && !movie.watched && genreValidation;
-        } else if(movieFilter === 'watched') {
+        } else if(dataFilter === 'watched') {
           return movie.name.toLowerCase().includes(search.toLowerCase()) && movie.watched && genreValidation;
         }
       });
@@ -34,7 +34,6 @@ export default function Movies() {
 
   function handleRating() {
     ratingMovie(selectedMovie.id, rating).then(success => {
-      console.log(success)
       if(success) {
         setMovies(oldMovies => {
           let editedMovies = [...oldMovies];
@@ -52,7 +51,7 @@ export default function Movies() {
 
   useEffect(() => {
     handleChangeMovies();
-  }, [movieFilter, movies, movieGenre]);
+  }, [dataFilter, movies, movieGenre]);
 
   useEffect(() => {
     getMovies().then(movies => { setMovies(movies.reverse()); });
@@ -62,9 +61,9 @@ export default function Movies() {
     <Container>
       <Header />
       <MoviesWrapper>
-        {moviesToShow.length > 0 
-          ? moviesToShow.map(movie => (
-            <div key={movie.id} className="animationUp movie">
+        {dataToShow.length > 0 
+          ? dataToShow.map((movie, index) => (
+            <div key={index} className="animationUp movie">
               <img src={movie.posterURL} alt="poster"/>
               <div>
                 <span>{movie.name}</span>
@@ -86,8 +85,10 @@ export default function Movies() {
                       </RatingConfirmWrapper>                
                 }
                 <div className="genres">
-                  {movie.genres.map(genre => 
-                    <Genre color={genre.color} onClick={() => setMovieGenre(genre.name)}>{genre.name}</Genre>
+                  {movie.genres.map((genre, index) => 
+                    <Genre key={index} color={genre.color} onClick={() => setMovieGenre(genre.name)}>
+                      {genre.name}
+                    </Genre>
                   )}
                 </div>
               </div>

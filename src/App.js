@@ -1,5 +1,5 @@
 import Menu from "./components/Menu";
-import GlobalProvider from "./Contex";
+import GlobalProvider from "./contexts/global";
 import Movies from "./pages/movies";
 
 export default function App() {

@@ -1,5 +1,16 @@
 import styled from 'styled-components';
 
+export const BottomWrapper = styled.footer`
+  width: 100%;
+  background-color: var(--blueDark);
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  margin-top: auto;
+  border-radius: 0.5rem;
+  position: relative;
+`
+
 export const SearchResultWrapper = styled.div`
   padding: 0.5rem 0;
   display: flex;
@@ -41,7 +52,7 @@ export const Movie = styled.div`
     align-items: center;
     border: 1px solid var(--blue);
     border-radius: 0.5rem;
-    margin-bottom: 2px;
+    /* margin-bottom: 2px; */
   }
 `
 
@@ -63,11 +74,16 @@ export const SelectedMovie = styled.div`
 
   label {
     margin-top: auto;
+    font-size: 0.9rem;;
     color: var(--black);
 
     input {
       margin-right: 0.25rem;
     }
+  }
+
+  select {
+    height: 2rem;
   }
 
   button {
@@ -76,16 +92,17 @@ export const SelectedMovie = styled.div`
     background-color: var(--purple);
     border: 1px solid var(--black);
     border-radius: 0.5rem;
-    padding: 0.5rem;
+    padding: 0.3rem;
     color: var(--black);
   }
 
   div.providers {
     display: flex;
+    overflow-x: auto;
 
     img {
-      width: 2rem;
-      height: 2rem;
+      width: 1.75rem;
+      height: 1.75rem;
       margin-right: 0.25rem;
       border-radius: 0.3rem;
     }

@@ -3,7 +3,7 @@ import axios from 'axios';
 export const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 axios.defaults.baseURL = baseUrl;
 
-export async function getMovies(watched) {
+export async function getMovies() {
   const response = await axios.get('/movies');
   return response.data;
 }

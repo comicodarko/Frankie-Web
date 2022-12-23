@@ -3,25 +3,25 @@ import { useContext } from "react";
 import { MenuPage, MenuWrapper } from "./styles";
 import { MoviesAndTv } from "@styled-icons/fluentui-system-filled";
 import { GameController } from "@styled-icons/ionicons-solid";
-import { GlobalContext } from '../../Contex';
+import { GlobalContext } from '../../contexts/global';
 
 export default function Menu() {
-  const { selectedPage, setSelectPage } = useContext(GlobalContext)
+  const { dataType, setDataType } = useContext(GlobalContext)
   return (
     <MenuWrapper>
       <h2>🤖 Frankie<span>.</span></h2>
 
       <ul>
         <MenuPage 
-          active={selectedPage === 'movies'}
-          onClick={() => {setSelectPage('movies')}}
+          active={dataType === 'movies'}
+          onClick={() => {setDataType('movies')}}
         >
           <MoviesAndTv size={30} />
           Filmes
         </MenuPage>
         <MenuPage 
-          active={selectedPage === 'games'}
-          onClick={() => {setSelectPage('games')}}
+          active={dataType === 'games'}
+          onClick={() => {setDataType('games')}}
         >
           <GameController size={30} />
           Jogos

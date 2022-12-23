@@ -1,37 +1,32 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { GlobalContext } from '../../../../Contex';
-import { newMovie, searchMovie } from '../../../../services/api';
-import { Movie, SearchResultWrapper, SelectedMovie } from './styled';
-import { ratingNotes } from '../../../../utils';
+import { GlobalContext } from '../../contexts/global';
+import { newMovie, searchMovie } from '../../services/api';
+import { BottomWrapper, Movie, SearchResultWrapper, SelectedMovie } from './styled';
+import { ratingNotes } from '../../utils';
+import { handleNewMovie, movieFind } from '../../utils/moviesUtils';
 
-export default function NewMovie() {
-  const { setMovies, movies } = useContext(GlobalContext);
+export default function Bottom() {
+  const { setMovies, movies, dataType } = useContext(GlobalContext);
   const [search, setSearch] = useState('');
   const [searchResult, setSearchResult] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState({});
+  const [selected, setSelected] = useState({});
   const [rating, setRating] = useState(ratingNotes[0]);
+  const type = 
+  dataType === 'movies' ? 'Filme' 
+  : dataType === 'games' && 'Jogo';
 
   function handleWatched() {
-    setSelectedMovie(movie => ({...movie, watched: !movie.watched}));
+    setSelected(movie => ({...movie, watched: !movie.watched}));
   }
 
-  function handleAddMovie() {
-    const found = movies.some((movie) => 
-      movie.name === selectedMovie.title || 
-      movie.name === selectedMovie.original_title) 
-
-    if(!found) {
-      newMovie(selectedMovie).then(newMovie => {
-        setSearch('');
-        setMovies(old => [{
-          name: newMovie.title,
-          rating: newMovie.rating,
-          posterURL: newMovie.poster
-        }, ...old]);
-      });
-    } else {
-      alert('Filme já existe em sua lista.');
+  function handleAdd() {
+    if(dataType === 'movies') {
+      const haveMovie = movieFind(movies, selected);
+      handleNewMovie(haveMovie, selected, setMovies);
+    } else if(dataType === 'games') {
+      alert('Em construção!');
     }
+    setSearch('');
   }
 
   useEffect(() => {
@@ -50,40 +45,40 @@ export default function NewMovie() {
   }, [search]);
 
   useEffect(() => {
-    selectedMovie.watched 
-      ? setSelectedMovie(movie => ({...movie, rating}))
-      : setSelectedMovie(movie => {
+    selected.watched 
+      ? setSelected(movie => ({...movie, rating}))
+      : setSelected(movie => {
         delete movie.rating;
         return movie;  
       })
-  }, [rating, selectedMovie.watched]);
+  }, [rating, selected.watched]);
 
   useEffect(() => {
     document.addEventListener('keydown', event => {
       if(event.key === 'Escape') {
         setSearchResult([]); 
-        setSelectedMovie({});
+        setSelected({});
         setSearch('');
       }
     });
   }, []);
 
   return (
-    <>
+    <BottomWrapper>
       {searchResult.length > 0 &&
         <SearchResultWrapper className='animationShow'>
           <div>
-            {searchResult.map(movie =>
+            {searchResult.map((movie) =>
               <React.Fragment key={movie.id}>
                 <Movie 
                   className='movie'
-                  onMouseEnter={() => setSelectedMovie(movie)} 
-                  onClick={() => setSelectedMovie(movie.id === selectedMovie.id ? {} : movie)}
-                  selected={selectedMovie.id === movie.id}
+                  onMouseEnter={() => setSelected(movie)} 
+                  onClick={() => setSelected(movie.id === selected.id ? {} : movie)}
+                  selected={selected.id === movie.id}
                 >
                   <img src={movie.poster} alt='Sem Poster' />
                 </Movie>
-                {selectedMovie.id === movie.id &&
+                {selected.id === movie.id &&
                   <SelectedMovie className='movieSelected animationShow'>
                     <h2>{movie.title}</h2>
                     <div className="providers">
@@ -93,14 +88,14 @@ export default function NewMovie() {
                       <input type="checkbox" checked={movie.checked} onChange={handleWatched} />
                       Assistido
                     </label>
-                    {selectedMovie.watched &&
+                    {selected.watched &&
                       <select className='animationUp' value={rating} onChange={e => setRating(e.target.value)}>
                         {ratingNotes.map(value => 
                           <option value={value} key={value}>{value}</option>  
                         )}
                       </select>
                     }
-                    <button onClick={handleAddMovie}>Adicionar</button>
+                    <button onClick={handleAdd}>Adicionar</button>
                   </SelectedMovie>
                 }
               </React.Fragment>
@@ -111,8 +106,8 @@ export default function NewMovie() {
       <input 
         value={search} 
         onChange={e => setSearch(e.target.value)} 
-        placeholder="Adicionar filme"  
+        placeholder={`Adicionar ${type}`}
       />
-    </>
+    </BottomWrapper>
   )
 }
