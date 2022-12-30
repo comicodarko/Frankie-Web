@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { VerticalDivider } from "../../components/Defaults";
 import { GlobalContext } from "../../contexts/global";
-import { FiltersWrapper, IconAll, IconUnwatched, IconWatched } from "./styles";
+import { FiltersWrapper, IconAll, IconTodo, IconDone } from "./styles";
 
 export default function Filters() {
   const { setDataFilter, dataFilter, movieGenres, setMovieGenre, movieGenre } = useContext(GlobalContext);
@@ -21,12 +21,12 @@ export default function Filters() {
           <IconAll size={32} active={dataFilter} />
         </button>
         <VerticalDivider />
-        <button onClick={() => setDataFilter('watched')}>
-          <IconWatched size={32} active={dataFilter} />
+        <button onClick={() => setDataFilter('done')}>
+          <IconDone size={32} active={dataFilter} />
         </button>
         <VerticalDivider />
-        <button onClick={() => setDataFilter('unwatched')}>
-          <IconUnwatched size={32} active={dataFilter}/>
+        <button onClick={() => setDataFilter('todo')}>
+          <IconTodo size={32} active={dataFilter}/>
         </button>
       </FiltersWrapper>
     </>

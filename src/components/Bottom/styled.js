@@ -32,12 +32,12 @@ export const SearchResultWrapper = styled.div`
   }
 ` 
 
-export const Movie = styled.div`
+export const Item = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 0.5rem;
   margin-right: ${props => props.selected ? '0' : '0.5rem'};
-  background-color: var(--blue);
+  background-color: var(--white);
   border-radius: 0.5rem;
   border-bottom-right-radius: ${props => props.selected ? '0' : '0.5rem'};
   border-top-right-radius: ${props => props.selected ? '0' : '0.5rem'};
@@ -50,17 +50,17 @@ export const Movie = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid var(--blue);
+    border: 2px solid var(--blue);
     border-radius: 0.5rem;
-    /* margin-bottom: 2px; */
+    color: var(--black);
   }
 `
 
-export const SelectedMovie = styled.div`
+export const SelectedItem = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 11rem;
-  background: var(--blue);
+  background: var(--white);
   padding: 0.25rem;
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
@@ -89,22 +89,38 @@ export const SelectedMovie = styled.div`
   button {
     margin-top: auto;
     width: 100%;
-    background-color: var(--purple);
+    background-color: var(--blue);
     border: 1px solid var(--black);
     border-radius: 0.5rem;
     padding: 0.3rem;
     color: var(--black);
+    transition: 0.3s;
+
+    &:hover {
+      filter: brightness(1.3)
+    }
   }
 
   div.providers {
     display: flex;
     overflow-x: auto;
-
+    
     img {
       width: 1.75rem;
       height: 1.75rem;
       margin-right: 0.25rem;
       border-radius: 0.3rem;
+    }
+  
+    &.platforms {
+      /* flex-direction: column; */
+      overflow-x: auto;
+      flex-wrap: wrap;
+
+      img {
+        height: 2.25rem;
+        width: 2.25rem;
+      }
     }
   }
 `

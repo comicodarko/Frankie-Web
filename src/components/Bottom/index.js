@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { GlobalContext } from '../../contexts/global';
-import { newMovie, searchMovie } from '../../services/api';
-import { BottomWrapper, Movie, SearchResultWrapper, SelectedMovie } from './styled';
+import { searchMovie } from '../../api/movies';
+import { BottomWrapper, Item, SearchResultWrapper, SelectedItem } from './styled';
 import { ratingNotes } from '../../utils';
 import { handleNewMovie, movieFind } from '../../utils/moviesUtils';
+import { searchGame } from '../../api/games';
+import { gameFind, handleNewGame } from '../../utils/gamesUtils';
 
 export default function Bottom() {
-  const { setMovies, movies, dataType } = useContext(GlobalContext);
+  const { setMovies, movies, dataType, games, setGames } = useContext(GlobalContext);
   const [search, setSearch] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const [selected, setSelected] = useState({});
@@ -15,8 +17,8 @@ export default function Bottom() {
   dataType === 'movies' ? 'Filme' 
   : dataType === 'games' && 'Jogo';
 
-  function handleWatched() {
-    setSelected(movie => ({...movie, watched: !movie.watched}));
+  function handleDone() {
+    setSelected(item => ({...item, done: !item.done}));
   }
 
   function handleAdd() {
@@ -24,34 +26,39 @@ export default function Bottom() {
       const haveMovie = movieFind(movies, selected);
       handleNewMovie(haveMovie, selected, setMovies);
     } else if(dataType === 'games') {
-      alert('Em construção!');
+      const haveGame = gameFind(games, selected);
+      handleNewGame(haveGame, selected, setGames);
     }
+    setSearchResult([]);
     setSearch('');
   }
 
-  useEffect(() => {
-    let timer;
+  function handleSubmit() {
     if(search) {
-      timer = setTimeout(() => {
-        searchMovie(search).then(result => {
-          setSearchResult(result);
-        })
-      }, 500);  
-    } else {
-      setSearchResult([]);
+      if(dataType === 'movies') searchMovie(search).then(result => {
+        setSearchResult(result);
+      })
+  
+      if(dataType === 'games') searchGame(search).then(result => {
+        setSearchResult(result);
+      });
+      setSelected({});
+      setSearch('');
     }
+  }
 
-    return () => clearTimeout(timer);
+  useEffect(() => {
+    setSearchResult([]);
   }, [search]);
 
   useEffect(() => {
-    selected.watched 
+    selected.done 
       ? setSelected(movie => ({...movie, rating}))
       : setSelected(movie => {
         delete movie.rating;
         return movie;  
       })
-  }, [rating, selected.watched]);
+  }, [rating, selected.done]);
 
   useEffect(() => {
     document.addEventListener('keydown', event => {
@@ -68,27 +75,35 @@ export default function Bottom() {
       {searchResult.length > 0 &&
         <SearchResultWrapper className='animationShow'>
           <div>
-            {searchResult.map((movie) =>
-              <React.Fragment key={movie.id}>
-                <Movie 
-                  className='movie'
-                  onMouseEnter={() => setSelected(movie)} 
-                  onClick={() => setSelected(movie.id === selected.id ? {} : movie)}
-                  selected={selected.id === movie.id}
+            {searchResult.map((item) =>
+              <React.Fragment key={item.id}>
+                <Item
+                  onMouseEnter={() => setSelected(item)} 
+                  onClick={() => setSelected(item.id === selected.id ? {} : item)}
+                  selected={selected.id === item.id}
                 >
-                  <img src={movie.poster} alt='Sem Poster' />
-                </Movie>
-                {selected.id === movie.id &&
-                  <SelectedMovie className='movieSelected animationShow'>
-                    <h2>{movie.title}</h2>
-                    <div className="providers">
-                      {movie.providers.map(provider => <img src={provider.logo} alt={provider.name}/>)}
+                  <img src={item.poster} alt='Sem Poster' />
+                </Item>
+                {selected.id === item.id &&
+                  <SelectedItem className='animationShow'>
+                    <h2>
+                      {dataType === 'movies' && item.title}
+                      {dataType === 'games' && item.name}
+                    </h2>
+                    <div className={`${item.platforms && 'platforms'} providers`}>
+                      {item.providers && item.providers.map(provider => 
+                        <img src={provider.logo} alt={provider.name}/>
+                      )}
+                      {item.platforms && item.platforms.map(platform => 
+                        <img src={platform.platform_logo} alt={platform.name}/>
+                      )}
                     </div>
                     <label>
-                      <input type="checkbox" checked={movie.checked} onChange={handleWatched} />
-                      Assistido
+                      <input type="checkbox" checked={item.checked} onChange={handleDone} />
+                      {dataType === 'movies' ? 'Assistido' 
+                      : dataType === 'games' && 'Zerado'}
                     </label>
-                    {selected.watched &&
+                    {selected.done &&
                       <select className='animationUp' value={rating} onChange={e => setRating(e.target.value)}>
                         {ratingNotes.map(value => 
                           <option value={value} key={value}>{value}</option>  
@@ -96,7 +111,7 @@ export default function Bottom() {
                       </select>
                     }
                     <button onClick={handleAdd}>Adicionar</button>
-                  </SelectedMovie>
+                  </SelectedItem>
                 }
               </React.Fragment>
             )}
@@ -107,6 +122,7 @@ export default function Bottom() {
         value={search} 
         onChange={e => setSearch(e.target.value)} 
         placeholder={`Adicionar ${type}`}
+        onKeyDown={e => e.key === 'Enter' && handleSubmit()}
       />
     </BottomWrapper>
   )

@@ -1,12 +1,11 @@
 import styled from "styled-components";
 import { ThSmall } from "@styled-icons/typicons"
-import { EyeFill, EyeSlash } from "@styled-icons/bootstrap"
+import { BookmarkCheckFill, BookmarkXFill } from "@styled-icons/bootstrap"
 
 export const FiltersWrapper = styled.section`
-  padding: 0.25rem 0.5rem;
+  padding: 0.3rem 0.5rem;
   border-radius: 0.25rem;
   background-color: var(--blueDark);
-  border: 2px solid var(--purple);
   display: flex;
 
   svg {
@@ -22,10 +21,10 @@ export const IconAll = styled(ThSmall)`
   fill: ${props => props.active === 'all' ? 'var(--blue)' : 'var(--black)'};
 `
 
-export const IconWatched = styled(EyeFill)`
-  fill: ${props => props.active  === 'watched' ? 'var(--blue)' : 'var(--black)'};
+export const IconDone = styled(BookmarkCheckFill)`
+  fill: ${props => props.active  === 'done' ? 'var(--blue)' : 'var(--black)'};
 `
 
-export const IconUnwatched = styled(EyeSlash)`
-  fill: ${props => props.active  === 'unwatched' ? 'var(--blue)' : 'var(--black)'};
+export const IconTodo = styled(BookmarkXFill)`
+  fill: ${props => props.active  === 'todo' ? 'var(--blue)' : 'var(--black)'};
 `

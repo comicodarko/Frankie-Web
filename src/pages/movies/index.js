@@ -3,14 +3,15 @@ import { Check2 } from '@styled-icons/bootstrap';
 
 import { Container } from "../../components/Defaults";
 import { GlobalContext } from "../../contexts/global";
-import { getMovies, ratingMovie } from "../../services/api";
+import { ratingMovie } from "../../api/movies";
 import { ratingNotes } from "../../utils";
 import Bottom from "../../components/Bottom";
 import { EvaluateButton, Genre, MoviesWrapper, NoMovies, RatingConfirmWrapper } from "./styles";
 import Header from "../../components/Header";
 
 export default function Movies() {
-  const { setMovies, movies, dataFilter, dataToShow, setDataToShow, search, movieGenre, setMovieGenre } = useContext(GlobalContext);
+  const { setMovies, movies, dataFilter, dataToShow, setDataToShow, search,
+    movieGenre, setMovieGenre, games, setGames } = useContext(GlobalContext);
   const [selectedMovie, setSelectedMovie] = useState({});
   const [rating, setRating] = useState(ratingNotes[0]);
 
@@ -22,10 +23,10 @@ export default function Movies() {
           : movie.genres.some(genre => genre.name === movieGenre); 
         if(dataFilter === 'all' && genreValidation) {
           return movie.name.toLowerCase().includes(search.toLowerCase()) && genreValidation;
-        } else if(dataFilter === 'unwatched') {
-          return movie.name.toLowerCase().includes(search.toLowerCase()) && !movie.watched && genreValidation;
-        } else if(dataFilter === 'watched') {
-          return movie.name.toLowerCase().includes(search.toLowerCase()) && movie.watched && genreValidation;
+        } else if(dataFilter === 'todo') {
+          return movie.name.toLowerCase().includes(search.toLowerCase()) && !movie.done && genreValidation;
+        } else if(dataFilter === 'done') {
+          return movie.name.toLowerCase().includes(search.toLowerCase()) && movie.done && genreValidation;
         }
       });
       return filtered;
@@ -39,7 +40,7 @@ export default function Movies() {
           let editedMovies = [...oldMovies];
           const movieIndex = oldMovies.findIndex(movie => movie.id === selectedMovie.id);
           console.log(movieIndex);
-          editedMovies[movieIndex] = {...selectedMovie, rating, watched: true}; 
+          editedMovies[movieIndex] = {...selectedMovie, rating, done: true}; 
           return editedMovies;
         });
       
@@ -52,10 +53,6 @@ export default function Movies() {
   useEffect(() => {
     handleChangeMovies();
   }, [dataFilter, movies, movieGenre]);
-
-  useEffect(() => {
-    getMovies().then(movies => { setMovies(movies.reverse()); });
-  }, []);
 
   return (
     <Container>

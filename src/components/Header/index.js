@@ -8,23 +8,21 @@ import { movieFilter } from "../../utils/moviesUtils";
 export default function Header() {
   const { setDataToShow, dataFilter, movies, search, setSearch, dataType } = useContext(GlobalContext);
   const type = 
-    dataType === 'movies' ? 'Filme' 
-    : dataType === 'games' && 'Jogo';
-  
+    dataType === 'movies' ? {label: 'Filme', done: 'Assistidos', todo: 'Para Assistir'} 
+    : dataType === 'games' && {label: 'Jogo', done: 'Zerados', todo: 'Para Zerar'};
+
   useEffect(() => {
-    const filtered =  
-      dataType === 'movies' ? movieFilter(movies, dataFilter, search)
-      : [];
-      setDataToShow(filtered);
-      console.log(filtered);  
+    let filtered = []  
+    dataType === 'movies' && movieFilter(movies, dataFilter, search)
+    setDataToShow(filtered);
   }, [search, dataFilter]);
 
   return (
     <HeaderWrapper>
-      <h1>{type}s</h1>
+      <h1>{type.label}s {dataFilter !== 'all' && type[dataFilter]}</h1>
       <input 
         value={search} onChange={e => setSearch(e.target.value)} 
-        placeholder={`Buscar ${type}`}  
+        placeholder={`Buscar ${type.label}`}  
       />
       <Filters />
     </HeaderWrapper>

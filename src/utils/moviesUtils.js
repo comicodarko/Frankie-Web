@@ -1,9 +1,9 @@
-import { newMovie } from "../services/api";
+import { newMovie } from "../api/movies";
 
 export function movieFilter(movies, dataFilter, search) {
   return movies.filter(movie => {
     const matchesSearch = movie.name.toLowerCase().includes(search.toLowerCase());
-    const matchesFilter = (dataFilter === 'all') || (dataFilter === 'unwatched' && !movie.watched) || (dataFilter === 'watched' && movie.watched);
+    const matchesFilter = (dataFilter === 'all') || (dataFilter === 'todo' && !movie.done) || (dataFilter === 'done' && movie.done);
     return matchesSearch && matchesFilter;
   });
 }
@@ -20,7 +20,7 @@ export function handleNewMovie(haveMovie, selectedMovie, setMovies) {
         rating: newMovie.rating,
         posterURL: newMovie.poster,
         genres: newMovie.genres,
-        watched: newMovie.watched
+        done: newMovie.done
       }, ...old]);
     });
   } else {

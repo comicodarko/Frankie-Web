@@ -8,11 +8,9 @@ export async function getMovies() {
   return response.data;
 }
 
-export async function searchMovie(movie) {
+export async function searchMovie(searchQuery) {
   const response = await axios.get('/movies/search', {
-    params: {
-      searchQuery: movie
-    }
+    params: { searchQuery }
   });
   return response.data;
 }
@@ -27,7 +25,7 @@ export async function ratingMovie(movieId, rating) {
   return response.status === 200;
 } 
 
-export async function getGenres() {
+export async function getMovieGenres() {
   const response = await axios.get('/movies/genres');
   return response.data;
 }
